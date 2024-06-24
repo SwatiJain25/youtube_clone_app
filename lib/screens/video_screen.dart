@@ -1,4 +1,3 @@
-// screens/video_screen.dart
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -13,17 +12,17 @@ class VideoScreen extends StatefulWidget {
 
 class _VideoScreenState extends State<VideoScreen> {
   late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
   bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _isPlaying = true;
-      });
+    _controller = VideoPlayerController.network(
+      widget.videoUrl,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
+    _initializeVideoPlayerFuture = _controller.initialize();
     _controller.addListener(() {
       setState(() {});
     });
@@ -42,8 +41,11 @@ class _VideoScreenState extends State<VideoScreen> {
         title: Text('Video Player'),
       ),
       body: Center(
-        child: _controller.value.isInitialized
-            ? Column(
+        child: FutureBuilder(
+          future: _initializeVideoPlayerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AspectRatio(
@@ -73,8 +75,12 @@ class _VideoScreenState extends State<VideoScreen> {
                     ],
                   ),
                 ],
-              )
-            : CircularProgressIndicator(),
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
       ),
     );
   }
