@@ -1,4 +1,3 @@
-// screens/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -29,31 +28,94 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.black, Colors.grey[900]!],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 10,
+              color: const Color.fromARGB(197, 255, 255, 255),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Welcome Back!',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: _login,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+                        child: Text(
+                          'Login',
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(132, 255, 255, 255), // Background color
+                        foregroundColor: Colors.black, // Text color
+                        elevation: 3, // Elevation
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.black), // Border color and width
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
+                      child: Text(
+                        'Don\'t have an account? Sign up',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/signup');
-              },
-              child: Text('Don\'t have an account? Sign up'),
-            ),
-          ],
+          ),
         ),
       ),
     );

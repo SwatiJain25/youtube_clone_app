@@ -1,4 +1,3 @@
-// providers/user_provider.dart
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import '../constants.dart';
@@ -32,5 +31,19 @@ class UserProvider with ChangeNotifier {
     } else {
       throw response.error!;
     }
+  }
+
+  Future<void> logout() async {
+    await _client.auth.signOut();
+    _userId = null;
+    notifyListeners();
+  }
+
+  Future<Map<String, dynamic>?> fetchUserInfo() async {
+    if (_userId != null) {
+      final response = await _client.from('profiles').select().eq('id', _userId).single().execute();
+      return response.data;
+    }
+    return null;
   }
 }
